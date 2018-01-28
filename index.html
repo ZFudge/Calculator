@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculator</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="calc.css">
+	<link href="https://fonts.googleapis.com/css?family=Graduate" rel="stylesheet">
+</head>
+<body>
+	<div id='calc-container'>
+		<div id='calc'>
+			<div id='display-container'>
+				<textarea id='main-display' rows='1' value='0' type="text" maxlength="10" readonly>0</textarea>
+				<textarea id="sub-display" rows='1' value='0' type="text" maxlength="35" readonly>7 + 789 - 353</textarea>
+			</div>
+			<div id="number-container">
+				<button onclick="inputNumber(this.value)" value="1">1</button>
+				<button onclick="inputNumber(this.value)" value="2">2</button>
+				<button onclick="inputNumber(this.value)" value="3">3</button>
+				<button onclick="inputNumber(this.value)" value="4">4</button>
+				<button onclick="inputNumber(this.value)" value="5">5</button>
+				<button onclick="inputNumber(this.value)" value="6">6</button>
+				<button onclick="inputNumber(this.value)" value="7">7</button>
+				<button onclick="inputNumber(this.value)" value="8">8</button>
+				<button onclick="inputNumber(this.value)" value="9">9</button>
+			</div>
+			<div id="misc-container">
+				<button>.</button>
+				<button onclick="inputNumber(this.value)" value="0">0</button>
+				<button id='equals'>=</button>
+			</div>
+			<div id="operator-container">
+				<button onclick="inputOperator(this.value)" value="/">&divide;</button>
+				<button onclick="inputOperator(this.value)" value="*">&times;</button>
+				<button onclick="inputOperator(this.value)" value="-">-</button>
+				<button onclick="inputOperator(this.value)" value="+">+</button>
+			</div>
+			<div id="o-container">
+				<button onclick="inputNumber(this.value)" value="0">x<sup>2</sup></button>
+				<button onclick="inputNumber(this.value)" value="0">x<sup>3</sup></button>
+				<button onclick="inputNumber(this.value)" value="0">x<sup>x</sup></button>
+				<button>&radic;</button>
+			</div>
+			<div id="m-container">
+				<button>CE</button>
+				<button id="clear-all">CA</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="calc.js"></script>
+</body>
+</html>
