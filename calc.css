@@ -83,7 +83,7 @@ textarea:focus {
 	border-radius: 20px;
 }
 
-#outer-number-container, #outer-x-container {
+#outer-number-container, #outer-misc-container {
 	display: inline-block;
 }
 
@@ -99,17 +99,18 @@ button {
 	font-family: 'Graduate', sans-serif;
 	font-weight: bold;
 	font-size: 14px;
-	border-left: 3px solid #353535;
+	border-left: 4px solid #353535;
 	border-top: 3px solid #444;
-	border-right: 3px solid #353535;
-	border-bottom: 3px solid #111;
+	border-right: 4px solid #353535;
+	border-bottom: 4px solid #111;
 }
 
 button:active {
-	border-left: 3px solid #252525;
-	border-top: 3px solid #000;
-	border-right: 3px solid #252525;
+	border-left: 4px solid #252525;
+	border-top: 4px solid #000;
+	border-right: 4px solid #252525;
 	border-bottom: 3px solid #333;
+	color: #DDD;
 }
 
 #button-container {
@@ -136,14 +137,21 @@ button:active {
 	grid-template-columns: 55px 55px 55px;
 }
 
-#outer-x-container {
+#outer-misc-container {
 	grid-row: 1;
 }
 
-#outer-x-container, #outer-number-container {
+#outer-misc-container, #outer-number-container {
 	display: inline-block;
 }
 
-#number-container, #outer-x-container {
+#number-container, #outer-misc-container {
 	border: 0px solid black;
+}
+
+#operator-container, #clear-container {
+	display: grid;
+	vertical-align: top;
+	grid-template-columns: 45px 45px 45px 45px;
+	grid-gap: 10px;
 }
