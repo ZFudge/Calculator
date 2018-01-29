@@ -53,8 +53,32 @@ const calc = {
 		this.mainDisplay.innerHTML += val;
 	},
 	x: {
-		square: (n) => n ** 2,
-		cube: (n) => n ** 3,
+		square: function() {
+			if (calc.input.length > 0) {
+				if (calc.isFloat()) {
+					calc.subDisplay.innerHTML = "((" + calc.subDisplay.innerHTML + ")&and;2)";
+					const result = parseFloat(calc.input.join("")) ** 2;
+					calc.mainDisplay.innerHTML = result;
+					calc.input = [result];
+				} else {
+					calc.equals();
+					calc.x.square();
+				}
+			}
+		},
+		cube: function(n) {
+			if (calc.input.length > 0) {
+				if (calc.isFloat()) {
+					calc.subDisplay.innerHTML = "((" + calc.subDisplay.innerHTML + ")&and;3)";
+					const result = parseFloat(calc.input.join("")) ** 3;
+					calc.mainDisplay.innerHTML = result;
+					calc.input = [result];
+				} else {
+					calc.equals();
+					calc.x.cube();
+				}
+			}
+		},
 		sqroot: function(n) {
 			calc.subDisplay.innerHTML = '&radic;' + "(" + calc.subDisplay.innerHTML + ")" 
 			return n ** 0.5;
