@@ -113,21 +113,27 @@ button:active {
 	color: #DDD;
 }
 
-#button-container {
+.col-btn {
+	display: block;
+}
+
+#outer-button-container {
 	display: grid;
 	grid-template-rows: 145px;
+	grid-template-columns: 165px 160px;
+}
+
+#inner-button-container {
+	text-align: center;
 }
 
 .sup {
 	vertical-align: top;
 }
 
-#equals, #clear-all {
-	width: 100px;
-}
 
-#clear-all {
-	height: 60px;
+#clear-all, #clear-one {
+	height: 64px;
 }
 
 #outer-number-container {
@@ -146,6 +152,11 @@ button:active {
 	grid-row: 1;
 }
 
+#inner-misc-container {
+	display: grid;
+	grid-template-columns: 55px 55px 55px;
+}
+
 #outer-misc-container, #outer-number-container {
 	display: inline-block;
 }
@@ -154,9 +165,17 @@ button:active {
 	border: 0px solid black;
 }
 
-#operator-container, #clear-container {
+#operator-container, #x-container {
 	display: grid;
 	vertical-align: top;
-	grid-template-columns: 45px 45px 45px 45px;
-	grid-gap: 10px;
+	width: : 45px;
+	grid-gap: 4px;
+}
+
+#operator-container, #x-container {
+	grid-template-rows: 30px 30px 30px 30px;
+}
+
+#clear-container {
+	grid-template-rows: 63px 63px;
 }
