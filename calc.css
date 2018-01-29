@@ -126,10 +126,15 @@ button:active {
 	width: 100px;
 }
 
+#clear-all {
+	height: 60px;
+}
+
 #outer-number-container {
 	vertical-align: top;
 	margin-left: 3px;
 	grid-row: 1;
+	z-index: 2;
 }
 #number-container {
 	width: 165px;

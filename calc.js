@@ -20,7 +20,6 @@ const calc = {
 	},
 	inputNumber: function(n) {
 		n = parseInt(n);
-		
 		(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
 		this.subAdd(n);
 		this.input.push(n);
@@ -32,13 +31,15 @@ const calc = {
 		"-": (x,y) => x - y
 	},
 	isOperator: function(o) {
-		return (o === unescape("%D7") || o === "+" || o === "-" || o === unescape("%F7"))
+		return (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === unescape("%F7"))
 	},
 	inputOperator: function(n, t) {
-		if (!this.isFloat()) this.equals();
-		if (this.input.length === 0) this.input.push(0),this.subAdd(0);
-		this.input.push(n);
-		this.subAdd(n, t || n);
+		if (this.input.length > 0 && !this.isOperator(this.input[this.input.length-1])) {
+			if (!this.isFloat()) this.equals();
+			if (this.input.length === 0) this.input.push(0),this.subAdd(0);
+			this.input.push(n);
+			this.subAdd(n, t || n);
+		}
 	},
 	subAdd: function(c,t) {
 		this.subDisplay.innerHTML += `${t || c}`;
@@ -50,8 +51,14 @@ const calc = {
 		this.subAdd(val);
 		this.input.push(val);
 		this.mainDisplay.innerHTML += val;
+	},
+	x: {
+		square: (n) => n ** 2,
+		cube: (n) => n ** 3,
+		sqroot: function(n) {
+			calc.subDisplay.innerHTML = '&radic;' + "(" + calc.subDisplay.innerHTML + ")" 
+			return n ** 0.5;
+		} 
 	}
 };
 
-calc.input.join('').split(/[0-9\.]/).join('');
-calc.input.join('').split(/[^-?0-9\.]/);
