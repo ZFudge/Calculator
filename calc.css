@@ -23,7 +23,6 @@ body, html {
 	height: 240px;
 	width: 400px;
 	box-shadow: 4px 10px 20px 5px rgba(0, 0, 0, 0.6);
-
 	
 	/*border-left: 1px solid #56c3ff;
 	border-top: 1px solid #72cdff;
@@ -103,6 +102,7 @@ button {
 	border-top: 3px solid #444;
 	border-right: 4px solid #353535;
 	border-bottom: 4px solid #111;
+	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.45);
 }
 
 button:active {
@@ -111,6 +111,7 @@ button:active {
 	border-right: 4px solid #252525;
 	border-bottom: 3px solid #333;
 	color: #DDD;
+	box-shadow: none;
 }
 
 .col-btn {
