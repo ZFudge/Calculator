@@ -36,15 +36,27 @@ const calc = {
 		this.input = [];
 		this.mainDisplay.innerHTML = 0;
 		this.subDisplay.innerHTML = "";
+		this.states = [];
 		this.pushState();
 	},
 	inputNumber: function(n) {
 		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
 			n = parseInt(n);
-			(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
-			this.subAdd(n);
-			calc.input.push(n);
-			this.pushState();
+			if (n === 0) {
+				if (this.input.length > 0 && this.mainDisplay.innerHTML.length>0) {
+					if (!this.isOperator(this.input[this.input.length-1])) {
+						(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
+						this.subAdd(n);
+						calc.input.push(n);
+						this.pushState();
+					}
+				}
+			} else {
+				(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
+				this.subAdd(n);
+				calc.input.push(n);
+				this.pushState();
+			}
 		}
 	},
 	operators: {
@@ -73,10 +85,18 @@ const calc = {
 		return this.input.every((cur)=>!isNaN(cur) || cur === '.');
 	},
 	inputFloat: function(val = '.') {
-		this.subAdd(val);
-		this.input.push(val);
-		this.mainDisplay.innerHTML += val;
-		this.pushState();
+		if (this.isOperator(this.input[this.input.length-1])) {
+			this.subAdd("0"+val);
+			this.input.push(0,val);
+			this.mainDisplay.innerHTML = "0"+val;
+			this.pushState();
+		} else if (this.mainDisplay.innerHTML.indexOf(val) === -1) {
+			this.subAdd(val);
+			this.input.push(val);
+			this.mainDisplay.innerHTML += val;
+			this.pushState();
+		}  
+
 	},
 	isWrapped() {
 		return (calc.subDisplay.innerHTML[0] === "(" && calc.subDisplay.innerHTML[calc.subDisplay.innerHTML.length-1] === ")");
