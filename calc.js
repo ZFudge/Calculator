@@ -1,21 +1,30 @@
 const calc = {
-	input: [],
 	mainDisplay: document.getElementById('main-display'),
 	subDisplay: document.getElementById('sub-display'),
-	equals: function() {
+	states: [],
+	input: [],
+	equaled: null,
+	operators: {
+		"*": (x,y) => x * y,
+		"/": (x,y) => x / y,
+		"+": (x,y) => x + y,
+		"-": (x,y) => x - y,
+		"%": (x,y) => x % y
+	},
+	equals() {
 		if (!this.isFloat()) {
+			this.equaled = true;
 			let n = calc.input.join('').split(/[^0-9\.]/)
 			if (n.length > 2) n.shift(),n[0] = n[0]*-1;
 			let o = calc.input.join('').split(/[0-9\.]/).join('');
 			if (o.length > 1) o = o[o.length -1];
-			const result = this.operators[o](parseInt(n[0]),parseInt(n[1]));
+			const result = this.operators[o](parseFloat(n[0]),parseFloat(n[1]));
 
 			this.mainDisplay.innerHTML = result;
 			this.input = [result];
 			this.pushState();
 		}
 	},
-	states: [],
 	pushState() {
 		this.states.push({
 			input: this.input.toString(),
@@ -23,7 +32,7 @@ const calc = {
 			subDisplay: this.subDisplay.innerHTML,
 		});
 	},
-	clearOne: function() {
+	clearOne() {
 		if (this.states.length > 1) {
 			this.states.pop();
 			const oldState = this.states[this.states.length-1];
@@ -32,15 +41,16 @@ const calc = {
 			this.subDisplay.innerHTML = oldState.subDisplay;
 		}
 	},
-	clearAll: function() {
+	clearAll() {
 		this.input = [];
 		this.mainDisplay.innerHTML = 0;
 		this.subDisplay.innerHTML = "";
 		this.states = [];
 		this.pushState();
 	},
-	inputNumber: function(n) {
+	inputNumber(n) {
 		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
+			if (this.equaled) this.clearAll(), this.equaled = false;
 			n = parseInt(n);
 			if (n === 0) {
 				if (this.input.length > 0 && this.mainDisplay.innerHTML.length>0) {
@@ -59,33 +69,25 @@ const calc = {
 			}
 		}
 	},
-	operators: {
-		"*": (x,y) => x * y,
-		"/": (x,y) => x / y,
-		"+": (x,y) => x + y,
-		"-": (x,y) => x - y,
-		"%": (x,y) => x % y
-	},
-	isOperator: function(o) {
-		return (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === "%" || o === unescape("%F7"))
-	},
-	inputOperator: function(n, t) {
+	isOperator:(o) => (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === "%" || o === unescape("%F7")),
+	inputOperator(n, t) {
 		if (this.input.length > 0 && !this.isOperator(this.input[this.input.length-1])) {
 			if (!this.isFloat()) this.equals();
+			if (this.equaled) this.equaled = false;
 			if (this.input.length === 0) this.input.push(0),this.subAdd(0);
 			this.input.push(n);
 			this.subAdd(n, t || n);
 			this.pushState();
 		}
 	},
-	subAdd: function(c,t) {
+	subAdd(c,t) {
 		this.subDisplay.innerHTML += `${t || c}`;
 	},
-	isFloat: function() {
+	isFloat() {
 		return this.input.every((cur)=>!isNaN(cur) || cur === '.');
 	},
-	inputFloat: function(val = '.') {
-		if (this.isOperator(this.input[this.input.length-1])) {
+	inputFloat(val = '.') {
+		if (this.isOperator(this.input[this.input.length-1]) || this.input.length < 1) {
 			this.subAdd("0"+val);
 			this.input.push(0,val);
 			this.mainDisplay.innerHTML = "0"+val;
@@ -96,7 +98,6 @@ const calc = {
 			this.mainDisplay.innerHTML += val;
 			this.pushState();
 		}  
-
 	},
 	isWrapped() {
 		return (calc.subDisplay.innerHTML[0] === "(" && calc.subDisplay.innerHTML[calc.subDisplay.innerHTML.length-1] === ")");
@@ -104,13 +105,11 @@ const calc = {
 	unwrap() {
 		this.subDisplay.innerHTML = this.subDisplay.innerHTML.slice(1,this.subDisplay.innerHTML.length-1);
 	},
-	presetExponent: function(n) {
+	presetExponent(n) {
 		if (calc.input.length > 0) {
 			if (calc.isFloat()) {
 				if (!calc.isWrapped()) calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + ")";
-					
 				(n === 0.5) ? calc.subDisplay.innerHTML = "&radic;" + calc.subDisplay.innerHTML : calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + "&and;" + n + ")";
-				
 				const result = parseFloat(calc.input.join("")) ** n;
 				calc.mainDisplay.innerHTML = result;
 				calc.input = [result];
