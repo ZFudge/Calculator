@@ -24,11 +24,13 @@ body, html {
 	width: 400px;
 	box-shadow: 4px 10px 20px 5px rgba(0, 0, 0, 0.6);
 	
-	/*border-left: 1px solid #56c3ff;
-	border-top: 1px solid #72cdff;
-	border-right: 1px solid #56c3ff;*/
 	border: 1px solid #0177b7;
 	border-bottom: : 2px solid #0177b7;
+	border-radius: 30px 30px 20px 20px;
+}
+
+#display-container {
+	border-radius: 20px;
 }
 
 #display-container {
@@ -78,10 +80,6 @@ textarea:focus {
 	height: 16px;
 }
 
-#display-container, #calc {
-	border-radius: 20px;
-}
-
 #outer-number-container, #outer-misc-container {
 	display: inline-block;
 }
@@ -118,14 +116,9 @@ button:active {
 	display: block;
 }
 
-#outer-button-container {
+#button-container {
 	display: grid;
-	grid-template-rows: 145px;
-	grid-template-columns: 165px 160px;
-}
-
-#inner-button-container {
-	text-align: center;
+	justify-content: center;
 }
 
 .sup {
@@ -139,7 +132,6 @@ button:active {
 
 #outer-number-container {
 	vertical-align: top;
-	margin-left: 3px;
 	grid-row: 1;
 	z-index: 2;
 }

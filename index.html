@@ -13,7 +13,7 @@
 				<textarea id="main-display" rows='1' value='0' type="text" maxlength="10" readonly>0</textarea>
 				<textarea id="sub-display" rows='1' value='0' type="text" maxlength="35" readonly></textarea>
 			</div>
-			<div id="inner-button-container">
+			<div id="button-container">
 				<div id="outer-number-container">
 					<div id="number-container">
 						<button onclick="calc.inputNumber(this.value)" value="7">7</button>
@@ -33,10 +33,10 @@
 				<div id="outer-misc-container">
 					<div id="inner-misc-container">
 						<div id="x-container">
-							<button onclick="calc.x.square()" class="sup col-btn">x<sup>2</sup></button>
-							<button onclick="calc.x.cube()" class="sup col-btn">x<sup>3</sup></button>
-							<button onclick="calc.x.square()" class="sup col-btn">x<sup>x</sup></button>
-							<button onclick="calc.x.sqroot()"  class="col-btn">&radic;</button>
+							<button onclick="calc.presetExponent(2)" class="sup col-btn">x<sup>2</sup></button>
+							<button onclick="calc.presetExponent(3)" class="sup col-btn">x<sup>3</sup></button>
+							<button onclick="calc.presetExponent(0.5)"  class="col-btn">&radic;</button>
+							<button onclick="calc.inputOperator(this.value)" value="%" class="sup col-btn">%</button>
 						</div>
 						<div id="operator-container">
 							<button onclick="calc.inputOperator(this.value,this.innerHTML)" value="/" class="col-btn">&divide;</button>
@@ -45,8 +45,8 @@
 							<button onclick="calc.inputOperator(this.value)" value="+" class="col-btn">+</button>
 						</div>
 						<div id="clear-container">
-							<button id="clear-one" >CE</button>
-							<button id="clear-all" onclick="calc.clear()">CA</button>
+							<button id="clear-one" onclick="calc.clearOne()">CE</button>
+							<button id="clear-all" onclick="calc.clearAll()">CA</button>
 						</div>
 					</div>
 				</div>
