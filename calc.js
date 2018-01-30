@@ -1,12 +1,4 @@
 const calc = {
-	states: [{input:[],mainDisplay:0,subDisplay: ""}],
-	pushState() {
-		this.states.push({
-			input: this.input.toString(),
-			mainDisplay: this.mainDisplay.innerHTML,
-			subDisplay: this.subDisplay.innerHTML,
-		});
-	},
 	input: [],
 	mainDisplay: document.getElementById('main-display'),
 	subDisplay: document.getElementById('sub-display'),
@@ -23,25 +15,35 @@ const calc = {
 			this.pushState();
 		}
 	},
+	states: [],
+	pushState() {
+		this.states.push({
+			input: this.input.toString(),
+			mainDisplay: this.mainDisplay.innerHTML,
+			subDisplay: this.subDisplay.innerHTML,
+		});
+	},
+	clearOne: function() {
+		if (this.states.length > 1) {
+			this.states.pop();
+			const oldState = this.states[this.states.length-1];
+			this.input = Array.from(oldState.input.replace(/\,/g,""));
+			this.mainDisplay.innerHTML = oldState.mainDisplay;
+			this.subDisplay.innerHTML = oldState.subDisplay;
+		}
+	},
 	clearAll: function() {
-		this.states = [{input:[],mainDisplay:"0",subDisplay: ""}],
 		this.input = [];
 		this.mainDisplay.innerHTML = 0;
 		this.subDisplay.innerHTML = "";
-	},
-	clearOne: function() {
-		if (this.states.length > 1) this.states.pop();
-		const oldState = this.states[this.states.length-1];
-		this.input = oldState.input.split(",");
-		this.mainDisplay.innerHTML = oldState.mainDisplay;
-		this.subDisplay.innerHTML = oldState.subDisplay;
+		this.pushState();
 	},
 	inputNumber: function(n) {
 		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
 			n = parseInt(n);
 			(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
 			this.subAdd(n);
-			this.input.push(n);
+			calc.input.push(n);
 			this.pushState();
 		}
 	},
@@ -100,6 +102,7 @@ const calc = {
 		}
 	}
 };
+calc.pushState();
 
 window.addEventListener("keydown", function(btn) { 
 	if (btn.keyCode === 13) { calc.equals();
