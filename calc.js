@@ -1,4 +1,12 @@
 const calc = {
+	states: [{input:[],mainDisplay:0,subDisplay: ""}],
+	pushState() {
+		this.states.push({
+			input: this.input.toString(),
+			mainDisplay: this.mainDisplay.innerHTML,
+			subDisplay: this.subDisplay.innerHTML,
+		});
+	},
 	input: [],
 	mainDisplay: document.getElementById('main-display'),
 	subDisplay: document.getElementById('sub-display'),
@@ -12,16 +20,21 @@ const calc = {
 
 			this.mainDisplay.innerHTML = result;
 			this.input = [result];
+			this.pushState();
 		}
 	},
 	clearAll: function() {
+		this.states = [{input:[],mainDisplay:"0",subDisplay: ""}],
 		this.input = [];
-
 		this.mainDisplay.innerHTML = 0;
 		this.subDisplay.innerHTML = "";
 	},
 	clearOne: function() {
-
+		if (this.states.length > 1) this.states.pop();
+		const oldState = this.states[this.states.length-1];
+		this.input = oldState.input.split(",");
+		this.mainDisplay.innerHTML = oldState.mainDisplay;
+		this.subDisplay.innerHTML = oldState.subDisplay;
 	},
 	inputNumber: function(n) {
 		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
@@ -29,6 +42,7 @@ const calc = {
 			(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
 			this.subAdd(n);
 			this.input.push(n);
+			this.pushState();
 		}
 	},
 	operators: {
@@ -47,6 +61,7 @@ const calc = {
 			if (this.input.length === 0) this.input.push(0),this.subAdd(0);
 			this.input.push(n);
 			this.subAdd(n, t || n);
+			this.pushState();
 		}
 	},
 	subAdd: function(c,t) {
@@ -59,9 +74,13 @@ const calc = {
 		this.subAdd(val);
 		this.input.push(val);
 		this.mainDisplay.innerHTML += val;
+		this.pushState();
 	},
 	isWrapped() {
 		return (calc.subDisplay.innerHTML[0] === "(" && calc.subDisplay.innerHTML[calc.subDisplay.innerHTML.length-1] === ")");
+	},
+	unwrap() {
+		this.subDisplay.innerHTML = this.subDisplay.innerHTML.slice(1,this.subDisplay.innerHTML.length-1);
 	},
 	presetExponent: function(n) {
 		if (calc.input.length > 0) {
@@ -77,6 +96,7 @@ const calc = {
 				calc.equals();
 				calc.presetExponent(n);
 			}
+			this.pushState();
 		}
 	}
 };
