@@ -14,11 +14,14 @@ const calc = {
 			this.input = [result];
 		}
 	},
-	clear: function() {
+	clearAll: function() {
 		this.input = [];
 
 		this.mainDisplay.innerHTML = 0;
 		this.subDisplay.innerHTML = "";
+	},
+	clearOne: function() {
+
 	},
 	inputNumber: function(n) {
 		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
@@ -32,10 +35,11 @@ const calc = {
 		"*": (x,y) => x * y,
 		"/": (x,y) => x / y,
 		"+": (x,y) => x + y,
-		"-": (x,y) => x - y
+		"-": (x,y) => x - y,
+		"%": (x,y) => x % y
 	},
 	isOperator: function(o) {
-		return (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === unescape("%F7"))
+		return (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === "%" || o === unescape("%F7"))
 	},
 	inputOperator: function(n, t) {
 		if (this.input.length > 0 && !this.isOperator(this.input[this.input.length-1])) {
@@ -56,63 +60,41 @@ const calc = {
 		this.input.push(val);
 		this.mainDisplay.innerHTML += val;
 	},
-	x: {
-		square: function() {
-			if (calc.input.length > 0) {
-				if (calc.isFloat()) {
-					calc.subDisplay.innerHTML = "((" + calc.subDisplay.innerHTML + ")&and;2)";
-					const result = parseFloat(calc.input.join("")) ** 2;
-					calc.mainDisplay.innerHTML = result;
-					calc.input = [result];
-				} else {
-					calc.equals();
-					calc.x.square();
-				}
+	isWrapped() {
+		return (calc.subDisplay.innerHTML[0] === "(" && calc.subDisplay.innerHTML[calc.subDisplay.innerHTML.length-1] === ")");
+	},
+	presetExponent: function(n) {
+		if (calc.input.length > 0) {
+			if (calc.isFloat()) {
+				if (!calc.isWrapped()) calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + ")";
+					
+				(n === 0.5) ? calc.subDisplay.innerHTML = "&radic;" + calc.subDisplay.innerHTML : calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + "&and;" + n + ")";
+				
+				const result = parseFloat(calc.input.join("")) ** n;
+				calc.mainDisplay.innerHTML = result;
+				calc.input = [result];
+			} else {
+				calc.equals();
+				calc.presetExponent(n);
 			}
-		},
-		cube: function(n) {
-			if (calc.input.length > 0) {
-				if (calc.isFloat()) {
-					calc.subDisplay.innerHTML = "((" + calc.subDisplay.innerHTML + ")&and;3)";
-					const result = parseFloat(calc.input.join("")) ** 3;
-					calc.mainDisplay.innerHTML = result;
-					calc.input = [result];
-				} else {
-					calc.equals();
-					calc.x.cube();
-				}
-			}
-		},
-		sqroot: function(n) {
-			if (calc.input.length > 0) {
-				if (calc.isFloat()) {
-					calc.subDisplay.innerHTML = "&radic;(" + calc.subDisplay.innerHTML + ")";
-					const result = Math.sqrt(parseFloat(calc.input.join("")));
-					calc.mainDisplay.innerHTML = result;
-					calc.input = [result];
-				} else {
-					calc.equals();
-					calc.x.sqroot();
-				}
-			}
-		} 
+		}
 	}
 };
 
 window.addEventListener("keydown", function(btn) { 
-	if (btn.keyCode === 13) calc.equals();
-	if (btn.keyCode === 48 || btn.keyCode === 96) calc.inputNumber(0);
-	if (btn.keyCode === 49 || btn.keyCode === 97) calc.inputNumber(1);
-	if (btn.keyCode === 50 || btn.keyCode === 98) calc.inputNumber(2);
-	if (btn.keyCode === 51 || btn.keyCode === 99) calc.inputNumber(3);
-	if (btn.keyCode === 52 || btn.keyCode === 100) calc.inputNumber(4);
-	if (btn.keyCode === 53 || btn.keyCode === 101) calc.inputNumber(5);
-	if (btn.keyCode === 54 || btn.keyCode === 102) calc.inputNumber(6);
-	if (btn.keyCode === 55 || btn.keyCode === 103) calc.inputNumber(7);
-	if (btn.keyCode === 56 || btn.keyCode === 104) calc.inputNumber(8);
-	if (btn.keyCode === 57 || btn.keyCode === 105) calc.inputNumber(9);
-	if (btn.keyCode === 107) calc.inputOperator("+"); 
-	if (btn.keyCode === 109) calc.inputOperator("-"); 
-	if (btn.keyCode === 106) calc.inputOperator("*"); 
-	if (btn.keyCode === 111) calc.inputOperator("/"); 
+	if (btn.keyCode === 13) { calc.equals();
+	} else if (btn.keyCode === 48 || btn.keyCode === 96) { calc.inputNumber(0);
+	} else if (btn.keyCode === 49 || btn.keyCode === 97) { calc.inputNumber(1);
+	} else if (btn.keyCode === 50 || btn.keyCode === 98) { calc.inputNumber(2);
+	} else if (btn.keyCode === 51 || btn.keyCode === 99) { calc.inputNumber(3);
+	} else if (btn.keyCode === 52 || btn.keyCode === 100) { calc.inputNumber(4);
+	} else if (btn.keyCode === 53 || btn.keyCode === 101) { calc.inputNumber(5);
+	} else if (btn.keyCode === 54 || btn.keyCode === 102) { calc.inputNumber(6);
+	} else if (btn.keyCode === 55 || btn.keyCode === 103) { calc.inputNumber(7);
+	} else if (btn.keyCode === 56 || btn.keyCode === 104) { calc.inputNumber(8);
+	} else if (btn.keyCode === 57 || btn.keyCode === 105) { calc.inputNumber(9);
+	} else if (btn.keyCode === 107) { calc.inputOperator("+"); 
+	} else if (btn.keyCode === 109) { calc.inputOperator("-"); 
+	} else if (btn.keyCode === 106) { calc.inputOperator("*"); 
+	} else if (btn.keyCode === 111) { calc.inputOperator("/");}
 });
