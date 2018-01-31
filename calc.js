@@ -113,6 +113,7 @@ const calc = {
 				const result = parseFloat(calc.input.join("")) ** n;
 				calc.mainDisplay.innerHTML = result;
 				calc.input = [result];
+				this.equaled = true;
 			} else {
 				calc.equals();
 				calc.presetExponent(n);
