@@ -3,6 +3,9 @@ const calc = {
 	subDisplay: document.getElementById('sub-display'),
 	states: [],
 	input: [],
+	get lastInput() {
+		return this.input[this.input.length-1];
+	},
 	equaled: null,
 	operators: {
 		"*": (x,y) => x * y,
@@ -12,7 +15,7 @@ const calc = {
 		"%": (x,y) => x % y
 	},
 	equals() {
-		if (!this.isFloat()) {
+		if (!this.isFloat() && !this.isOperator(this.lastInput)) {
 			this.equaled = true;
 			let n = calc.input.join('').split(/[^0-9\.]/)
 			if (n.length > 2) n.shift(),n[0] = n[0]*-1;
@@ -21,6 +24,7 @@ const calc = {
 			const result = this.operators[o](parseFloat(n[0]),parseFloat(n[1]));
 
 			this.mainDisplay.innerHTML = result;
+			this.subDisplay.innerHTML = result;
 			this.input = [result];
 			this.pushState();
 		}
@@ -49,12 +53,12 @@ const calc = {
 		this.pushState();
 	},
 	inputNumber(n) {
-		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.input[this.input.length-1])) {
+		if (this.mainDisplay.innerHTML.length < 12 || this.isOperator(this.lastInput) || this.equaled) {
 			if (this.equaled) this.clearAll(), this.equaled = false;
 			n = parseInt(n);
 			if (n === 0) {
 				if (this.input.length > 0 && this.mainDisplay.innerHTML.length>0) {
-					if (!this.isOperator(this.input[this.input.length-1])) {
+					if (!this.isOperator(this.lastInput)) {
 						(this.input.length === 0 || this.isOperator(this.subDisplay.innerHTML[this.subDisplay.innerHTML.length-1])) ? this.mainDisplay.innerHTML = n : this.mainDisplay.innerHTML += n;
 						this.subAdd(n);
 						calc.input.push(n);
@@ -71,7 +75,7 @@ const calc = {
 	},
 	isOperator:(o) => (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === "%" || o === unescape("%F7")),
 	inputOperator(n, t) {
-		if (this.input.length > 0 && !this.isOperator(this.input[this.input.length-1])) {
+		if (this.input.length > 0 && !this.isOperator(this.lastInput)) {
 			if (!this.isFloat()) this.equals();
 			if (this.equaled) this.equaled = false;
 			if (this.input.length === 0) this.input.push(0),this.subAdd(0);
@@ -87,7 +91,7 @@ const calc = {
 		return this.input.every((cur)=>!isNaN(cur) || cur === '.');
 	},
 	inputFloat(val = '.') {
-		if (this.isOperator(this.input[this.input.length-1]) || this.input.length < 1) {
+		if (this.isOperator(this.lastInput) || this.input.length < 1) {
 			this.subAdd("0"+val);
 			this.input.push(0,val);
 			this.mainDisplay.innerHTML = "0"+val;
@@ -106,7 +110,7 @@ const calc = {
 		this.subDisplay.innerHTML = this.subDisplay.innerHTML.slice(1,this.subDisplay.innerHTML.length-1);
 	},
 	presetExponent(n) {
-		if (calc.input.length > 0 && this.isFloat()) {
+		if (calc.input.length > 0) {
 			if (calc.isFloat()) {
 				if (!calc.isWrapped()) calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + ")";
 				(n === 0.5) ? calc.subDisplay.innerHTML = "&radic;" + calc.subDisplay.innerHTML : calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + "&and;" + n + ")";
@@ -115,20 +119,19 @@ const calc = {
 				calc.input = [result];
 				this.equaled = true;
 			} else {
-				calc.equals();
+				(this.isOperator(this.lastInput)) ? this.clearOne() : calc.equals();
 				calc.presetExponent(n);
 			}
 			this.pushState();
-		} else if (this.isOperator(this.input[this.input.length-1])) {
-			this.clearOne();
-			this.presetExponent(n);
 		}
 	}
 };
 calc.pushState();
 
 window.addEventListener("keydown", function(btn) { 
-	if (btn.keyCode === 13) { calc.equals();
+	if (btn.keyCode === 8 || btn.keyCode === 37) { calc.clearOne();
+	} else if (btn.keyCode === 13 || btn.keyCode === 187) { calc.equals();
+	} else if (btn.keyCode === 27) { calc.clearAll();
 	} else if (btn.keyCode === 48 || btn.keyCode === 96) { calc.inputNumber(0);
 	} else if (btn.keyCode === 49 || btn.keyCode === 97) { calc.inputNumber(1);
 	} else if (btn.keyCode === 50 || btn.keyCode === 98) { calc.inputNumber(2);
@@ -140,7 +143,12 @@ window.addEventListener("keydown", function(btn) {
 	} else if (btn.keyCode === 56 || btn.keyCode === 104) { calc.inputNumber(8);
 	} else if (btn.keyCode === 57 || btn.keyCode === 105) { calc.inputNumber(9);
 	} else if (btn.keyCode === 107) { calc.inputOperator("+"); 
-	} else if (btn.keyCode === 109) { calc.inputOperator("-"); 
+	} else if (btn.keyCode === 109 || btn.keyCode === 189) { calc.inputOperator("-"); 
 	} else if (btn.keyCode === 106) { calc.inputOperator("*"); 
-	} else if (btn.keyCode === 111) { calc.inputOperator("/");}
+	} else if (btn.keyCode === 110) { calc.inputFloat();
+	} else if (btn.keyCode === 111) { calc.inputOperator("/");
+	} else if (btn.keyCode === 77) { calc.presetExponent("2");
+	} else if (btn.keyCode === 188) { calc.presetExponent("3");
+	} else if (btn.keyCode === 190) { calc.presetExponent("0.5");
+	} else if (btn.keyCode === 191) { calc.inputOperator("%");}
 });
