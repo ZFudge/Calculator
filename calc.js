@@ -106,7 +106,7 @@ const calc = {
 		this.subDisplay.innerHTML = this.subDisplay.innerHTML.slice(1,this.subDisplay.innerHTML.length-1);
 	},
 	presetExponent(n) {
-		if (calc.input.length > 0) {
+		if (calc.input.length > 0 && this.isFloat()) {
 			if (calc.isFloat()) {
 				if (!calc.isWrapped()) calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + ")";
 				(n === 0.5) ? calc.subDisplay.innerHTML = "&radic;" + calc.subDisplay.innerHTML : calc.subDisplay.innerHTML = "(" + calc.subDisplay.innerHTML + "&and;" + n + ")";
@@ -119,6 +119,9 @@ const calc = {
 				calc.presetExponent(n);
 			}
 			this.pushState();
+		} else if (this.isOperator(this.input[this.input.length-1])) {
+			this.clearOne();
+			this.presetExponent(n);
 		}
 	}
 };
