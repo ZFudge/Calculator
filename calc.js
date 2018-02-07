@@ -75,7 +75,7 @@ const calc = {
 	},
 	isOperator:(o) => (o === unescape("%D7") || o === "+" || o === "*" || o === "/" || o === "-" || o === "%" || o === unescape("%F7")),
 	inputOperator(n, t) {
-		if (this.input.length > 0 && !this.isOperator(this.lastInput)) {
+		if ((this.input.length > 0 && !this.isOperator(this.lastInput)) || !this.input.length && n === "-") {
 			if (!this.isFloat()) this.equals();
 			if (this.equaled) this.equaled = false;
 			if (this.input.length === 0) this.input.push(0),this.subAdd(0);
