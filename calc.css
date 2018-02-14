@@ -2,8 +2,11 @@ body, html {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 	user-select: none;
-	background-color: #999;
+	background-color: #F8F8F8;
 }
 
 #calc-container {
