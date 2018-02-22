@@ -1,7 +1,6 @@
 body, html {
 	margin: 0;
 	padding: 0;
-	height: 100%;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -11,11 +10,11 @@ body, html {
 
 #outer-container {
 	position: relative;
-	height: 100%;
 	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+    padding: 10em 0;
 }
 
 #calc {
