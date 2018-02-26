@@ -7,6 +7,14 @@ body, html {
 	user-select: none;
 	background-color: #F8F8F8;
 }
+#nav-placeholder {
+  	width: 100%;
+  	max-width: 800px;
+  	margin: 0 auto;
+}
+#nav-placeholder object {
+  	width: 100%;
+}
 
 #outer-container {
 	position: relative;
@@ -14,7 +22,7 @@ body, html {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-    padding: 10em 0;
+    padding: 5em 0;
 }
 
 #calc {
